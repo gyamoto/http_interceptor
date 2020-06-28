@@ -55,16 +55,20 @@ class HttpClientWithInterceptor extends BaseClient {
     this.interceptors,
     this.requestTimeout,
     this.retryPolicy,
+    Client client,
     this.badCertificateCallback,
-  });
+  })  : assert(client == null || badCertificateCallback == null),
+        _client = client;
 
   factory HttpClientWithInterceptor.build({
     @required List<InterceptorContract> interceptors,
     Duration requestTimeout,
     RetryPolicy retryPolicy,
+    Client client,
     bool Function(X509Certificate, String, int) badCertificateCallback,
   }) {
     assert(interceptors != null);
+    assert(client == null || badCertificateCallback == null);
 
     //Remove any value that is null.
     interceptors.removeWhere((interceptor) => interceptor == null);
@@ -72,6 +76,7 @@ class HttpClientWithInterceptor extends BaseClient {
         interceptors: interceptors,
         requestTimeout: requestTimeout,
         retryPolicy: retryPolicy,
+        client: client,
         badCertificateCallback: badCertificateCallback);
   }
 
